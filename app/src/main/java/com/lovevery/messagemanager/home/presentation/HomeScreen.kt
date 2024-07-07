@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.shared.Routes
+import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
@@ -78,9 +79,8 @@ fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
 
                 }
 
-                is HomeUiState.Success -> PostContent(
+                is HomeUiState.Success -> Content(
                     navController,
-                    homeViewModel,
                     (homeUiState as HomeUiState.Success).messages,
                     listState,
                 )
@@ -119,7 +119,7 @@ fun MessageItem(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
     ) {
-        Row {
+        Row(Modifier.padding(bottom = 8.dp)) {
             Image(
                 painter = painterResource(id = R.drawable.ic_profile),
                 contentDescription = "profile",
@@ -153,13 +153,13 @@ fun MessageItem(
                 .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                 .weight(1f),
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyLarge
-            //maxLines = 2
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 2
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "Category:",
+                text = stringResource(id = R.string.category),
                 style = MaterialTheme.typography.labelLarge,
                 overflow = TextOverflow.Ellipsis,
 
@@ -190,10 +190,9 @@ fun MessageItem(
 }
 
 @Composable
-fun PostContent(
+fun Content(
     navController: NavHostController,
-    viewModel: HomeViewModel,
-    messages: List<UserMessage>,
+    messages: List<UserMessageModel>,
     listState: LazyListState,
 ) {
 
@@ -213,11 +212,4 @@ fun PostContent(
                 })
         }
     }
-
-    /* LaunchedEffect(listState.canScrollForward) {
-         if (listState.canScrollForward.not() && listState.firstVisibleItemIndex > 1) {
-             viewModel.fetchPosts()
-         }
-     }*/
-
 }

@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.home.presentation
+package com.lovevery.messagemanager.shared.presentation
 
 data class MessageModel(
     val subject: String,

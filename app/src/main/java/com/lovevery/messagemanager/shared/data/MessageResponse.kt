@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.home.data
+package com.lovevery.messagemanager.shared.data
 
 import com.google.gson.annotations.SerializedName
 

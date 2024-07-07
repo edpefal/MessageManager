@@ -1,6 +1,6 @@
 package com.lovevery.messagemanager.home.domain
 
-import com.lovevery.messagemanager.home.data.MessageResponse
+import com.lovevery.messagemanager.shared.data.MessageResponse
 import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {

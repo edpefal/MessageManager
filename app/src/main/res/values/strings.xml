@@ -7,4 +7,7 @@
     <string name="total_messages">Messages: %1$d</string>
     <string name="last_message">Last Message</string>
     <string name="all_messages">All Messages</string>
+    <string name="header_profile">Profile</string>
+    <string name="category">Category:</string>
+    <string name="messages">Messages:</string>
 </resources>
