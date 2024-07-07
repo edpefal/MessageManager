@@ -2,8 +2,11 @@ package com.lovevery.messagemanager.home.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +19,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -95,15 +99,16 @@ fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
 }
 
 @Composable
-fun PostItem(
+fun MessageItem(
     user: String,
     message: String,
     subject: String,
+    totalMessages: Int,
     onClick: () -> Unit? = {},
 ) {
     Card(modifier = Modifier
         .clickable {
-            onClick()
+
         }
         .height(dimensionResource(id = R.dimen.message_item_height))
         .fillMaxWidth()
@@ -124,22 +129,62 @@ fun PostItem(
             )
             Text(
                 text = user,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f)
+            )
+            Text(
+                text = stringResource(id = R.string.total_messages, totalMessages),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(16.dp)
             )
         }
         Text(
-            text = message,
-            Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+            text = stringResource(id = R.string.last_message),
+            Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
             fontSize = 18.sp,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = subject,
-            Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-            fontSize = 18.sp,
-            overflow = TextOverflow.Ellipsis
+            text = message,
+            Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .weight(1f),
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyLarge
+            //maxLines = 2
         )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "Category:",
+                style = MaterialTheme.typography.labelLarge,
+                overflow = TextOverflow.Ellipsis,
+
+                )
+            Text(
+                text = subject,
+                modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                overflow = TextOverflow.Ellipsis,
+
+                )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            OutlinedButton(
+                onClick = { onClick() },
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                Text(text = stringResource(id = R.string.all_messages))
+            }
+        }
+
     }
 
 }
@@ -154,13 +199,18 @@ fun PostContent(
 
     LazyColumn(state = listState) {
         items(messages) { item ->
-            PostItem(item.user, "item.message", "item.subject", onClick = {
-                navController.navigate(
-                    Routes.ProfileScreen.createRoute(
-                        item.user,
+            MessageItem(
+                item.user,
+                item.messages.last().message,
+                item.messages.last().subject,
+                item.messages.size,
+                onClick = {
+                    navController.navigate(
+                        Routes.ProfileScreen.createRoute(
+                            item.user,
+                        )
                     )
-                )
-            })
+                })
         }
     }
 

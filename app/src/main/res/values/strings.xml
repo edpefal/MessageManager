@@ -4,4 +4,7 @@
     <string name="error_text">An error occurred, try again later</string>
     <string name="loading">Loading…</string>
     <string name="fetching_data">Fetching some data…</string>
+    <string name="total_messages">Messages: %1$d</string>
+    <string name="last_message">Last Message</string>
+    <string name="all_messages">All Messages</string>
 </resources>
