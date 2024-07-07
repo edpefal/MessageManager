@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Message Manager</string>
+    <string name="home_header">All messages</string>
+    <string name="error_text">An error occurred, try again later</string>
+    <string name="loading">Loading…</string>
+    <string name="fetching_data">Fetching some data…</string>
 </resources>
