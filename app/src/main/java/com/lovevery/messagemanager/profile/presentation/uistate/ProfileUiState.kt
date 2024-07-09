@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.presentation
+package com.lovevery.messagemanager.profile.presentation.uistate
 
 import com.lovevery.messagemanager.shared.presentation.MessageModel
 

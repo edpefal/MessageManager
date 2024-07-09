@@ -1,10 +1,11 @@
-package com.lovevery.messagemanager.profile.presentation
+package com.lovevery.messagemanager.profile.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lovevery.messagemanager.profile.domain.GetAllMessagesByUserNameUseCase
+import com.lovevery.messagemanager.profile.presentation.uistate.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch

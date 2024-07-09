@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.presentation
+package com.lovevery.messagemanager.profile.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
+import com.lovevery.messagemanager.profile.presentation.uistate.ProfileUiState
+import com.lovevery.messagemanager.profile.presentation.viewmodels.ProfileViewModel
 import com.lovevery.messagemanager.shared.widgets.Header
 import kotlinx.coroutines.launch
 

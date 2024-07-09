@@ -51,6 +51,8 @@ import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
+import com.lovevery.messagemanager.profile.presentation.dialogs.SearchUserMessagesDialog
+import com.lovevery.messagemanager.profile.presentation.viewmodels.SearchUserMessagesDialogViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 
@@ -59,15 +61,25 @@ import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     addMessageViewModel: AddMessageViewModel,
+    searchUserMessagesDialogViewModel: SearchUserMessagesDialogViewModel,
     navController: NavHostController
 ) {
     LaunchedEffect(Unit) {
         homeViewModel.getAllMessages()
     }
 
+
+
     val homeUiState: HomeUiState by homeViewModel.homeUiSate.observeAsState(initial = HomeUiState.Empty)
     val listState = rememberLazyListState()
-    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var showAddMessageDialog by rememberSaveable { mutableStateOf(false) }
+    var showSearchUserMessagesDialog by rememberSaveable { mutableStateOf(false) }
+
+    fun handleDismiss() {
+        showAddMessageDialog = false
+        showSearchUserMessagesDialog = false
+        homeViewModel.getAllMessages()
+    }
 
     Scaffold(
         topBar = {
@@ -76,17 +88,25 @@ fun HomeScreen(
                     Text(
                         text = stringResource(id = R.string.home_header),
                         modifier = Modifier.padding(dimensionResource(id = R.dimen.default_margin)),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.displaySmall,
                     )
                 },
                 actions = {
-                    IconButton(onClick = { showDialog = true }) {
-                        Icon(Icons.Default.Search, contentDescription = "")
+                    IconButton(onClick = { showSearchUserMessagesDialog = true }) {
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = "",
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
                 }
             )
         },
-        floatingActionButton = { AddMessageButtonFAB { showDialog = true } }) { paddingValues ->
+        floatingActionButton = {
+            AddMessageButtonFAB {
+                showAddMessageDialog = true
+            }
+        }) { paddingValues ->
         Column(Modifier.padding(paddingValues)) {
 
             when (homeUiState) {
@@ -113,45 +133,67 @@ fun HomeScreen(
                     (homeUiState as HomeUiState.Success).messages,
                     listState,
                     addMessageViewModel,
-                    showDialog
-                ) {
-                    showDialog = false
-                    homeViewModel.getAllMessages()
-                }
+                    searchUserMessagesDialogViewModel,
+                    showAddMessageDialog,
+                    showSearchUserMessagesDialog,
+                    onDismissDialog = {
+                        handleDismiss()
+                    },
+                    onSearchUser = { username ->
+                        goToUserMessagesScreen(navController, username)
+                    }
+                )
 
                 HomeUiState.Empty -> EmptyState(
                     paddingValues,
-                    showDialog,
-                    addMessageViewModel
-                ) {
-                    showDialog = false
-                    homeViewModel.getAllMessages()
-
-                }
+                    showAddMessageDialog,
+                    showSearchUserMessagesDialog,
+                    addMessageViewModel,
+                    searchUserMessagesDialogViewModel,
+                    onDismissDialog = {
+                       handleDismiss()
+                    },
+                    onSearchUser = { username ->
+                        goToUserMessagesScreen(navController, username)
+                    }
+                )
             }
         }
     }
 }
 
+
 @Composable
 private fun EmptyState(
     paddingValues: PaddingValues,
     showDialog: Boolean,
+    showSearchUserMessagesDialog: Boolean,
     addMessageViewModel: AddMessageViewModel,
-    onDismissDialog: () -> Unit
+    searchUserMessagesDialogViewModel: SearchUserMessagesDialogViewModel,
+    onDismissDialog: () -> Unit,
+    onSearchUser: (String) -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = stringResource(id = R.string.fetching_data),
+            text = stringResource(id = R.string.no_messages_found),
             Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(paddingValues)
                 .fillMaxSize(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge
+
         )
         if (showDialog) {
             AddMessageDialog(
                 addMessageViewModel = addMessageViewModel, onDismissDialog
+            )
+        }
+        if (showSearchUserMessagesDialog) {
+            SearchUserMessagesDialog(
+                searchUserMessagesViewModel = searchUserMessagesDialogViewModel,
+                onDismissDialog,
+                onSearchUser
             )
         }
     }
@@ -253,8 +295,11 @@ fun Content(
     messages: List<UserMessageModel>,
     listState: LazyListState,
     addMessageViewModel: AddMessageViewModel,
+    searchUserMessagesDialogViewModel: SearchUserMessagesDialogViewModel,
     showDialog: Boolean,
-    onDismissDialog: () -> Unit
+    showSearchUserMessagesDialog: Boolean,
+    onDismissDialog: () -> Unit,
+    onSearchUser: (String) -> Unit
 ) {
     LazyColumn(state = listState) {
         items(messages) { item ->
@@ -264,11 +309,7 @@ fun Content(
                 item.messages.last().subject,
                 item.messages.size,
                 onClick = {
-                    navController.navigate(
-                        Routes.ProfileScreen.createRoute(
-                            item.user,
-                        )
-                    )
+                    goToUserMessagesScreen(navController, item.user)
                 })
         }
     }
@@ -277,6 +318,24 @@ fun Content(
             addMessageViewModel = addMessageViewModel, onDismissDialog
         )
     }
+    if (showSearchUserMessagesDialog) {
+        SearchUserMessagesDialog(
+            searchUserMessagesViewModel = searchUserMessagesDialogViewModel,
+            onDismissDialog,
+            onSearchUser
+        )
+    }
+}
+
+private fun goToUserMessagesScreen(
+    navController: NavHostController,
+    username: String
+) {
+    navController.navigate(
+        Routes.ProfileScreen.createRoute(
+            username,
+        )
+    )
 }
 
 @Composable
