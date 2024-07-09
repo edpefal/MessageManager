@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-const val ADD_OPERATION = "add_message"
+const val ADD_OPERATION = "add_messag"
 
 class AddMessageUseCase @Inject constructor(private val addMessageRepository: AddMessageRepository) {
 

@@ -39,6 +39,10 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
         _inputMessage.value = inputText
     }
 
+    fun updateUiState(newUIState: AddMessageUiState){
+        _addMessageUiSate.value = AddMessageUiState.Empty
+    }
+
 
     fun addMessage() {
         viewModelScope.launch {

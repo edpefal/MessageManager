@@ -23,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lovevery.messagemanager.R
+import com.lovevery.messagemanager.ui.theme.CustomTextStyles
 
 @Composable
 fun AddMessageDialog(
@@ -51,11 +51,14 @@ fun AddMessageDialog(
     val textMessage by addMessageViewModel.inputMessage.observeAsState(initial = "")
 
 
-    Dialog(onDismissRequest = { onDismissRequest() }) {
+    Dialog(onDismissRequest = {
+        addMessageViewModel.updateUiState(AddMessageUiState.Empty)
+        onDismissRequest()
+    }) {
         Surface(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(500.dp),
+                .fillMaxWidth(),
+                //.height(500.dp),
             shape = RoundedCornerShape(16.dp),
             contentColor = Color.LightGray
         ) {
@@ -97,7 +100,10 @@ fun AddMessageDialog(
                     )
                     OutlinedButton(
                         modifier = Modifier.padding(start = 16.dp, top = 16.dp),
-                        onClick = { onDismissRequest()}) {
+                        onClick = {
+                            addMessageViewModel.updateUiState(AddMessageUiState.Empty)
+                            onDismissRequest()
+                        }) {
                         Text(text = stringResource(id = R.string.cancel))
                     }
                     Button(
@@ -129,60 +135,30 @@ fun AddMessageDialog(
                 when (addMessageUiState) {
                     is AddMessageUiState.IsLoading -> {
                         Text(
-                            text = "Cargando", modifier = Modifier
+                            text = stringResource(id = R.string.loading), modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .padding(16.dp),
                             textAlign = TextAlign.Center
                         )
                     }
 
                     is AddMessageUiState.Error -> {
                         Text(
-                            text = "Ocurrió un error, intenta de nuevo", modifier = Modifier
+                            text = stringResource(id = R.string.error_text), modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
-                            textAlign = TextAlign.Center
+                                .padding(16.dp),
+                            textAlign = TextAlign.Center,
+                            style = CustomTextStyles.errorStyle
                         )
                     }
 
-                    is AddMessageUiState.Empty -> Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Intenta buscar un producto",
-                            color = Color.Black,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    is AddMessageUiState.Empty -> Spacer(modifier = Modifier.height(16.dp))
 
                     is AddMessageUiState.Success -> {
-                        val productList =
+                        val message =
                             (addMessageUiState as AddMessageUiState.Success).messageAdded
-
-                        /*LazyColumn(
-                            Modifier.padding(all = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp), content = {
-                                items(items = productList) {
-                                    Text(
-                                        text = it.name,
-                                        color = Color.Black,
-                                        modifier = Modifier
-                                            .padding(
-                                                bottom = 16.dp,
-                                            )
-                                            .clickable {
-                                                onProductSelected(it)
-                                            }
-                                    )
-                                    Divider()
-                                }
-                            }
-                        )*/
-
+                        addMessageViewModel.updateUiState(AddMessageUiState.Empty)
+                        onDismissRequest()
                     }
                 }
             }

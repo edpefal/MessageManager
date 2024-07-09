@@ -18,14 +18,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,13 +54,13 @@ import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     addMessageViewModel: AddMessageViewModel,
     navController: NavHostController
 ) {
-
     LaunchedEffect(Unit) {
         homeViewModel.getAllMessages()
     }
@@ -65,33 +69,44 @@ fun HomeScreen(
     val listState = rememberLazyListState()
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
-
-    Scaffold(floatingActionButton = { AddMessageButtonFAB { showDialog = true } }) {
-        Column(Modifier.padding(it)) {
-            Text(
-                text = stringResource(id = R.string.home_header),
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.default_margin)),
-                style = MaterialTheme.typography.titleLarge,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.home_header),
+                        modifier = Modifier.padding(dimensionResource(id = R.dimen.default_margin)),
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                },
+                actions = {
+                    IconButton(onClick = { showDialog = true }) {
+                        Icon(Icons.Default.Search, contentDescription = "")
+                    }
+                }
             )
+        },
+        floatingActionButton = { AddMessageButtonFAB { showDialog = true } }) { paddingValues ->
+        Column(Modifier.padding(paddingValues)) {
+
             when (homeUiState) {
                 HomeUiState.Error -> Text(
                     text = stringResource(id = R.string.error_text),
                     Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(it)
-                        .fillMaxSize(), textAlign = TextAlign.Center
+                        .padding(paddingValues)
+                        .fillMaxSize(),
+                    textAlign = TextAlign.Center
                 )
 
-                HomeUiState.Loading -> {
-                    Text(
-                        text = stringResource(id = R.string.loading),
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(it)
-                            .fillMaxSize(), textAlign = TextAlign.Center
-                    )
-
-                }
+                HomeUiState.Loading -> Text(
+                    text = stringResource(id = R.string.loading),
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(paddingValues)
+                        .fillMaxSize(),
+                    textAlign = TextAlign.Center
+                )
 
                 is HomeUiState.Success -> Content(
                     navController,
@@ -101,22 +116,26 @@ fun HomeScreen(
                     showDialog
                 ) {
                     showDialog = false
-
+                    homeViewModel.getAllMessages()
                 }
 
-                HomeUiState.Empty -> extracted(it, showDialog, addMessageViewModel) {
+                HomeUiState.Empty -> EmptyState(
+                    paddingValues,
+                    showDialog,
+                    addMessageViewModel
+                ) {
                     showDialog = false
-                }
+                    homeViewModel.getAllMessages()
 
+                }
             }
         }
-
     }
 }
 
 @Composable
-private fun extracted(
-    it: PaddingValues,
+private fun EmptyState(
+    paddingValues: PaddingValues,
     showDialog: Boolean,
     addMessageViewModel: AddMessageViewModel,
     onDismissDialog: () -> Unit
@@ -126,8 +145,9 @@ private fun extracted(
             text = stringResource(id = R.string.fetching_data),
             Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(it)
-                .fillMaxSize(), textAlign = TextAlign.Center
+                .padding(paddingValues)
+                .fillMaxSize(),
+            textAlign = TextAlign.Center
         )
         if (showDialog) {
             AddMessageDialog(
@@ -156,74 +176,75 @@ fun MessageItem(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
     ) {
-        Row(Modifier.padding(bottom = 8.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "profile",
-                modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.image_message_size))
-                    .padding(start = 8.dp, top = 8.dp)
-            )
-            Text(
-                text = user,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(1f)
-            )
-            Text(
-                text = stringResource(id = R.string.total_messages, totalMessages),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-        Text(
-            text = stringResource(id = R.string.last_message),
-            Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
-            fontSize = 18.sp,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = message,
-            Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                .weight(1f),
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2
-        )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = stringResource(id = R.string.category),
-                style = MaterialTheme.typography.labelLarge,
-                overflow = TextOverflow.Ellipsis,
-
+        Column {
+            Row(Modifier.padding(bottom = 8.dp)) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_profile),
+                    contentDescription = "profile",
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.image_message_size))
+                        .padding(start = 8.dp, top = 8.dp)
                 )
-            Text(
-                text = subject,
-                modifier = Modifier.padding(start = 4.dp, end = 16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                overflow = TextOverflow.Ellipsis,
-
+                Text(
+                    text = user,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
                 )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-        ) {
-            OutlinedButton(
-                onClick = { onClick() },
-                modifier = Modifier.align(Alignment.CenterEnd)
+                Text(
+                    text = stringResource(id = R.string.total_messages, totalMessages),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            Text(
+                text = stringResource(id = R.string.last_message),
+                Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                fontSize = 18.sp,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = message,
+                Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .weight(1f),
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.all_messages))
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(id = R.string.category),
+                    style = MaterialTheme.typography.labelLarge,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = subject,
+                    modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+            ) {
+                OutlinedButton(
+                    onClick = { onClick() },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Text(text = stringResource(id = R.string.all_messages))
+                }
             }
         }
-
     }
-
 }
 
 @Composable
@@ -235,8 +256,6 @@ fun Content(
     showDialog: Boolean,
     onDismissDialog: () -> Unit
 ) {
-
-
     LazyColumn(state = listState) {
         items(messages) { item ->
             MessageItem(
