@@ -10,4 +10,6 @@
     <string name="header_profile">Profile</string>
     <string name="category">Category:</string>
     <string name="messages">Messages:</string>
+    <string name="add_message">Add Message</string>
+    <string name="cancel">Cancel</string>
 </resources>

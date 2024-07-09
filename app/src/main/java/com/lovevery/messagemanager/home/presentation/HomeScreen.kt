@@ -1,10 +1,10 @@
 package com.lovevery.messagemanager.home.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -26,6 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,23 +45,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
+import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
+import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
+fun HomeScreen(
+    homeViewModel: HomeViewModel,
+    addMessageViewModel: AddMessageViewModel,
+    navController: NavHostController
+) {
 
     LaunchedEffect(Unit) {
         homeViewModel.getAllMessages()
     }
 
     val homeUiState: HomeUiState by homeViewModel.homeUiSate.observeAsState(initial = HomeUiState.Empty)
-    //val posts by postListViewModel.posts.observeAsState(emptyList())
     val listState = rememberLazyListState()
-    Scaffold {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
+
+    Scaffold(floatingActionButton = { AddMessageButtonFAB { showDialog = true } }) {
         Column(Modifier.padding(it)) {
             Text(
-                //color = MaterialTheme.colorScheme.primary,
                 text = stringResource(id = R.string.home_header),
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.default_margin)),
                 style = MaterialTheme.typography.titleLarge,
@@ -83,18 +97,43 @@ fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
                     navController,
                     (homeUiState as HomeUiState.Success).messages,
                     listState,
-                )
+                    addMessageViewModel,
+                    showDialog
+                ) {
+                    showDialog = false
 
-                HomeUiState.Empty -> Text(
-                    text = stringResource(id = R.string.fetching_data),
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(it)
-                        .fillMaxSize(), textAlign = TextAlign.Center
-                )
+                }
+
+                HomeUiState.Empty -> extracted(it, showDialog, addMessageViewModel) {
+                    showDialog = false
+                }
+
             }
         }
 
+    }
+}
+
+@Composable
+private fun extracted(
+    it: PaddingValues,
+    showDialog: Boolean,
+    addMessageViewModel: AddMessageViewModel,
+    onDismissDialog: () -> Unit
+) {
+    Column {
+        Text(
+            text = stringResource(id = R.string.fetching_data),
+            Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(it)
+                .fillMaxSize(), textAlign = TextAlign.Center
+        )
+        if (showDialog) {
+            AddMessageDialog(
+                addMessageViewModel = addMessageViewModel, onDismissDialog
+            )
+        }
     }
 }
 
@@ -106,16 +145,14 @@ fun MessageItem(
     totalMessages: Int,
     onClick: () -> Unit? = {},
 ) {
-    Card(modifier = Modifier
-        .clickable {
-
-        }
-        .height(dimensionResource(id = R.dimen.message_item_height))
-        .fillMaxWidth()
-        .padding(
-            vertical = dimensionResource(id = R.dimen.default_vertical_padding),
-            horizontal = dimensionResource(id = R.dimen.default_margin)
-        ),
+    Card(
+        modifier = Modifier
+            .height(dimensionResource(id = R.dimen.message_item_height))
+            .fillMaxWidth()
+            .padding(
+                vertical = dimensionResource(id = R.dimen.default_vertical_padding),
+                horizontal = dimensionResource(id = R.dimen.default_margin)
+            ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
     ) {
@@ -194,7 +231,11 @@ fun Content(
     navController: NavHostController,
     messages: List<UserMessageModel>,
     listState: LazyListState,
+    addMessageViewModel: AddMessageViewModel,
+    showDialog: Boolean,
+    onDismissDialog: () -> Unit
 ) {
+
 
     LazyColumn(state = listState) {
         items(messages) { item ->
@@ -211,5 +252,17 @@ fun Content(
                     )
                 })
         }
+    }
+    if (showDialog) {
+        AddMessageDialog(
+            addMessageViewModel = addMessageViewModel, onDismissDialog
+        )
+    }
+}
+
+@Composable
+fun AddMessageButtonFAB(onClickAddMessage: () -> Unit) {
+    FloatingActionButton(onClick = onClickAddMessage) {
+        Icon(Icons.Default.Create, contentDescription = stringResource(id = R.string.add_message))
     }
 }

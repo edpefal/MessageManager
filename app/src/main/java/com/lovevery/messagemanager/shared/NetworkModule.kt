@@ -1,6 +1,9 @@
 package com.lovevery.messagemanager.shared
 
 import com.google.gson.Gson
+import com.lovevery.messagemanager.addmessage.data.AddMessageClient
+import com.lovevery.messagemanager.addmessage.data.AddMessageRepositoryImpl
+import com.lovevery.messagemanager.addmessage.domain.AddMessageRepository
 import com.lovevery.messagemanager.home.data.HomeClient
 import com.lovevery.messagemanager.home.data.HomeRepositoryImpl
 import com.lovevery.messagemanager.home.domain.HomeRepository
@@ -62,6 +65,16 @@ class NetworkModule {
     @Provides
     fun provideProfileRepository(profileRepositoryImpl: ProfileRepositoryImpl): ProfileRepository {
         return profileRepositoryImpl
+    }
+
+    @Provides
+    fun provideAddMessageClient(retrofit: Retrofit): AddMessageClient {
+        return retrofit.create(AddMessageClient::class.java)
+    }
+
+    @Provides
+    fun provideAddMessageRepository(adsMessageRepositoryImpl: AddMessageRepositoryImpl): AddMessageRepository{
+        return adsMessageRepositoryImpl
     }
 
 

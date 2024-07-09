@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.home.presentation.HomeScreen
 import com.lovevery.messagemanager.home.presentation.HomeViewModel
 import com.lovevery.messagemanager.profile.presentation.ProfileScreen
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val addMessageViewModel: AddMessageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Routes.HomeScreen.route) {
                     composable(Routes.HomeScreen.route) {
-                        HomeScreen(homeViewModel, navController)
+                        HomeScreen(homeViewModel, addMessageViewModel, navController)
                     }
                     composable(
                         Routes.ProfileScreen.route,
