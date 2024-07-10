@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetAllMessagesByUserNameUseCase @Inject constructor(private val profileRepository: ProfileRepository) {
+class GetAllMessagesByUserNameUseCase @Inject constructor(private val userMessagesRepository: UserMessagesRepository) {
     suspend operator fun invoke(userName: String): Flow<List<MessageModel>> =
-        profileRepository.getAllMessagesByUser(userName).map { userMessagesResponse ->
+        userMessagesRepository.getAllMessagesByUser(userName).map { userMessagesResponse ->
             userMessagesResponse.messages.map { message ->
                 message.toMessageModel()
             }

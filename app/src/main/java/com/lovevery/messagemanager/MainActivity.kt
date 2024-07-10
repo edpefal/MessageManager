@@ -14,7 +14,7 @@ import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.home.presentation.HomeScreen
 import com.lovevery.messagemanager.home.presentation.HomeViewModel
 import com.lovevery.messagemanager.usermessages.presentation.screens.UserMessagesScreen
-import com.lovevery.messagemanager.usermessages.presentation.viewmodels.ProfileViewModel
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.UserMessagesViewModel
 import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.ui.theme.MessageManagerTheme
@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val userMessagesViewModel: UserMessagesViewModel by viewModels()
     private val addMessageViewModel: AddMessageViewModel by viewModels()
     private val searchUserMessagesDialogViewModel: SearchUserMessagesDialogViewModel by viewModels()
 
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         UserMessagesScreen(
-                            profileViewModel,
+                            userMessagesViewModel,
                             it.arguments?.getString("userName").orEmpty(),
                             navController
                         )

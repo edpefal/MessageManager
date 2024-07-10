@@ -5,9 +5,10 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
@@ -18,10 +19,12 @@ class AddMessageViewModelTest {
     private lateinit var addMessageUseCase: AddMessageUseCase
     private val testDispatcher = StandardTestDispatcher()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         addMessageUseCase = mockk()
         addMessageViewModel = AddMessageViewModel(addMessageUseCase)
+        Dispatchers.setMain(testDispatcher)
     }
 
     @Test
@@ -47,27 +50,34 @@ class AddMessageViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `when a message is added the UiState is updates with a success state`() = runBlocking {
-        Dispatchers.setMain(testDispatcher)
-
-        val username = "username"
-        val subject = "subject"
-        val message = "message"
-
-        val addMessageModel = AddMessageModel(username, subject, message)
-
-        addMessageViewModel.onSubjectText(subject)
-        addMessageViewModel.onMessageText(message)
-        addMessageViewModel.onUserText(username)
-
-        coEvery { addMessageUseCase.invoke(addMessageModel) } returns flowOf(addMessageModel)
+    fun `when a message is added the UiState is updated with a success state`() = runTest {
+        val addMessageModel = AddMessageModel("user", "subject", "message")
+        coEvery { addMessageUseCase(any()) } returns flow {
+            emit(addMessageModel)
+        }
 
         addMessageViewModel.addMessage()
+        advanceUntilIdle()
 
         assert(
             addMessageViewModel.addMessageUiSate.value == AddMessageUiState.Success(
                 addMessageModel
             )
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `when a message is not added the UiState is updated with an error state`() = runTest {
+        coEvery { addMessageUseCase(any()) } returns flow {
+            throw Exception("error")
+        }
+
+        addMessageViewModel.addMessage()
+        advanceUntilIdle()
+
+        assert(
+            addMessageViewModel.addMessageUiSate.value == AddMessageUiState.Error
         )
     }
 

@@ -7,9 +7,9 @@ import com.lovevery.messagemanager.addmessage.domain.AddMessageRepository
 import com.lovevery.messagemanager.home.data.HomeClient
 import com.lovevery.messagemanager.home.data.HomeRepositoryImpl
 import com.lovevery.messagemanager.home.domain.HomeRepository
-import com.lovevery.messagemanager.usermessages.data.ProfileClient
-import com.lovevery.messagemanager.usermessages.data.ProfileRepositoryImpl
-import com.lovevery.messagemanager.usermessages.domain.ProfileRepository
+import com.lovevery.messagemanager.usermessages.data.UserMessagesClient
+import com.lovevery.messagemanager.usermessages.data.UserMessagesRepositoryImpl
+import com.lovevery.messagemanager.usermessages.domain.UserMessagesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,13 +58,13 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideProfileClient(retrofit: Retrofit): ProfileClient {
-        return retrofit.create(ProfileClient::class.java)
+    fun provideProfileClient(retrofit: Retrofit): UserMessagesClient {
+        return retrofit.create(UserMessagesClient::class.java)
     }
 
     @Provides
-    fun provideProfileRepository(profileRepositoryImpl: ProfileRepositoryImpl): ProfileRepository {
-        return profileRepositoryImpl
+    fun provideProfileRepository(userMessagesRepositoryImpl: UserMessagesRepositoryImpl): UserMessagesRepository {
+        return userMessagesRepositoryImpl
     }
 
     @Provides

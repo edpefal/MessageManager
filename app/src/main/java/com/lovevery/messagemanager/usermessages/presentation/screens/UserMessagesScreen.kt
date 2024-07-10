@@ -38,18 +38,18 @@ import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.shared.widgets.Header
 import com.lovevery.messagemanager.usermessages.presentation.uistate.UserMessagesUiState
-import com.lovevery.messagemanager.usermessages.presentation.viewmodels.ProfileViewModel
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.UserMessagesViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun UserMessagesScreen(
-    profileViewModel: ProfileViewModel,
+    userMessagesViewModel: UserMessagesViewModel,
     userName: String,
     navController: NavHostController,
 
     ) {
-    profileViewModel.getAllMessagesByUserName(userName)
-    val postUiState: UserMessagesUiState by profileViewModel.profileUiSate.collectAsState(
+    userMessagesViewModel.getAllMessagesByUserName(userName)
+    val postUiState: UserMessagesUiState by userMessagesViewModel.profileUiSate.collectAsState(
         initial = UserMessagesUiState.Loading
     )
     val scrollState = rememberScrollState()
@@ -61,7 +61,7 @@ fun UserMessagesScreen(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            Header(stringResource(id = R.string.header_profile)) {
+            Header(stringResource(id = R.string.header_user_messages)) {
                 coroutineScope.launch {
                     navController.popBackStack()
                 }

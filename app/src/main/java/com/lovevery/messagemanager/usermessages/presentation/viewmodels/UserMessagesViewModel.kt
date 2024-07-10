@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val getAllMessagesByUserNameUseCase: GetAllMessagesByUserNameUseCase) :
+class UserMessagesViewModel @Inject constructor(private val getAllMessagesByUserNameUseCase: GetAllMessagesByUserNameUseCase) :
     ViewModel() {
 
     private val _profileUiSate = MutableStateFlow<UserMessagesUiState>(UserMessagesUiState.Empty)
