@@ -49,7 +49,7 @@ fun UserMessagesScreen(
 
     ) {
     userMessagesViewModel.getAllMessagesByUserName(userName)
-    val postUiState: UserMessagesUiState by userMessagesViewModel.profileUiSate.collectAsState(
+    val postUiState: UserMessagesUiState by userMessagesViewModel.userMessageUiState.collectAsState(
         initial = UserMessagesUiState.Loading
     )
     val scrollState = rememberScrollState()

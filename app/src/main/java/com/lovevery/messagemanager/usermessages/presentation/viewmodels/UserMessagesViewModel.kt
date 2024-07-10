@@ -13,24 +13,25 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class UserMessagesViewModel @Inject constructor(private val getAllMessagesByUserNameUseCase: GetAllMessagesByUserNameUseCase) :
-    ViewModel() {
+class UserMessagesViewModel @Inject constructor(
+    private val getAllMessagesByUserNameUseCase: GetAllMessagesByUserNameUseCase
+) : ViewModel() {
 
-    private val _profileUiSate = MutableStateFlow<UserMessagesUiState>(UserMessagesUiState.Empty)
-    val profileUiSate: StateFlow<UserMessagesUiState> get() = _profileUiSate
+    private val _userMessageUiSate = MutableStateFlow<UserMessagesUiState>(UserMessagesUiState.Empty)
+    val userMessageUiState: StateFlow<UserMessagesUiState> get() = _userMessageUiSate
 
 
     fun getAllMessagesByUserName(userName: String) {
         viewModelScope.launch {
-            _profileUiSate.value = UserMessagesUiState.Loading
+            _userMessageUiSate.value = UserMessagesUiState.Loading
             getAllMessagesByUserNameUseCase(userName)
                 .catch {
-                    _profileUiSate.value = UserMessagesUiState.Error
+                    _userMessageUiSate.value = UserMessagesUiState.Error
                 }.collect { messages ->
                     if (messages.isEmpty()) {
-                        _profileUiSate.value = UserMessagesUiState.Empty
+                        _userMessageUiSate.value = UserMessagesUiState.Empty
                     } else {
-                        _profileUiSate.value = UserMessagesUiState.Success(messages)
+                        _userMessageUiSate.value = UserMessagesUiState.Success(messages)
                     }
 
                 }
