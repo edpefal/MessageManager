@@ -1,11 +1,14 @@
-package com.lovevery.messagemanager.profile.presentation.screens
+package com.lovevery.messagemanager.usermessages.presentation.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,21 +36,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
-import com.lovevery.messagemanager.profile.presentation.uistate.ProfileUiState
-import com.lovevery.messagemanager.profile.presentation.viewmodels.ProfileViewModel
 import com.lovevery.messagemanager.shared.widgets.Header
+import com.lovevery.messagemanager.usermessages.presentation.uistate.UserMessagesUiState
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.ProfileViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileScreen(
+fun UserMessagesScreen(
     profileViewModel: ProfileViewModel,
     userName: String,
     navController: NavHostController,
 
     ) {
     profileViewModel.getAllMessagesByUserName(userName)
-    val postUiState: ProfileUiState by profileViewModel.profileUiSate.observeAsState(
-        initial = ProfileUiState.Loading
+    val postUiState: UserMessagesUiState by profileViewModel.profileUiSate.observeAsState(
+        initial = UserMessagesUiState.Loading
     )
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
@@ -55,7 +58,7 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
             Header(stringResource(id = R.string.header_profile)) {
@@ -64,39 +67,51 @@ fun ProfileScreen(
                 }
 
             }
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "profile",
-                modifier = Modifier
-                    .size(150.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                userName,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-
-            )
-            Text(
-                stringResource(id = R.string.messages),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-            )
             when (postUiState) {
-                ProfileUiState.Error -> Text(text = "Error")
-                ProfileUiState.Loading -> Text(text = "Loading")
-                is ProfileUiState.Success -> {
+                UserMessagesUiState.Error -> Box(
+                    modifier = Modifier.fillMaxSize().background(Color.Red),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxSize(),
+                        text = stringResource(id = R.string.no_messages),
+                        style = MaterialTheme.typography.displayMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                UserMessagesUiState.Loading -> Text(text = "Loading")
+                is UserMessagesUiState.Success -> {
                     Column {
-                        (postUiState as ProfileUiState.Success).messages.forEach { item ->
+
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_profile),
+                            contentDescription = "profile",
+                            modifier = Modifier
+                                .size(150.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            userName,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+
+                        )
+                        Text(
+                            stringResource(id = R.string.messages),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        (postUiState as UserMessagesUiState.Success).messages.forEach { item ->
                             ProfileMessageItem(message = item.message, subject = item.subject)
                         }
                     }
                 }
 
-                ProfileUiState.Empty -> Text(text = "Empty")
+                UserMessagesUiState.Empty -> Text(text = "Empty")
             }
 
         }

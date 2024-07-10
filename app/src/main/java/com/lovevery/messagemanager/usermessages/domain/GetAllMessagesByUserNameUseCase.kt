@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.domain
+package com.lovevery.messagemanager.usermessages.domain
 
 import com.lovevery.messagemanager.shared.presentation.MessageModel
 import com.lovevery.messagemanager.shared.toMessageModel

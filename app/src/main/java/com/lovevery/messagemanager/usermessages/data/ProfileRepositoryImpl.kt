@@ -1,7 +1,7 @@
-package com.lovevery.messagemanager.profile.data
+package com.lovevery.messagemanager.usermessages.data
 
 import com.google.gson.Gson
-import com.lovevery.messagemanager.profile.domain.ProfileRepository
+import com.lovevery.messagemanager.usermessages.domain.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

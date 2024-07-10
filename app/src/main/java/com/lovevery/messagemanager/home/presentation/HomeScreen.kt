@@ -51,8 +51,8 @@ import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
-import com.lovevery.messagemanager.profile.presentation.dialogs.SearchUserMessagesDialog
-import com.lovevery.messagemanager.profile.presentation.viewmodels.SearchUserMessagesDialogViewModel
+import com.lovevery.messagemanager.usermessages.presentation.dialogs.SearchUserMessagesDialog
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 

@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.presentation.dialogs
+package com.lovevery.messagemanager.usermessages.presentation.dialogs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lovevery.messagemanager.R
-import com.lovevery.messagemanager.profile.presentation.viewmodels.SearchUserMessagesDialogViewModel
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 
 @Composable
 fun SearchUserMessagesDialog(

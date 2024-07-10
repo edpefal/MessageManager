@@ -13,9 +13,9 @@ import androidx.navigation.navArgument
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.home.presentation.HomeScreen
 import com.lovevery.messagemanager.home.presentation.HomeViewModel
-import com.lovevery.messagemanager.profile.presentation.screens.ProfileScreen
-import com.lovevery.messagemanager.profile.presentation.viewmodels.ProfileViewModel
-import com.lovevery.messagemanager.profile.presentation.viewmodels.SearchUserMessagesDialogViewModel
+import com.lovevery.messagemanager.usermessages.presentation.screens.UserMessagesScreen
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.ProfileViewModel
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.ui.theme.MessageManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                             navArgument("userName") { type = NavType.StringType },
                         )
                     ) {
-                        ProfileScreen(
+                        UserMessagesScreen(
                             profileViewModel,
                             it.arguments?.getString("userName").orEmpty(),
                             navController

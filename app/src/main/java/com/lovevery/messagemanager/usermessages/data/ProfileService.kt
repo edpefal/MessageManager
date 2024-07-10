@@ -1,6 +1,5 @@
-package com.lovevery.messagemanager.profile.data
+package com.lovevery.messagemanager.usermessages.data
 
-import com.google.gson.Gson
 import com.lovevery.messagemanager.shared.ApiResponse
 import javax.inject.Inject
 

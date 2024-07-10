@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.data
+package com.lovevery.messagemanager.usermessages.data
 
 import com.google.gson.annotations.SerializedName
 import com.lovevery.messagemanager.shared.data.MessageResponse

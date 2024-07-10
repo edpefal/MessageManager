@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.data
+package com.lovevery.messagemanager.usermessages.data
 
 import com.lovevery.messagemanager.shared.ApiResponse
 import retrofit2.http.GET

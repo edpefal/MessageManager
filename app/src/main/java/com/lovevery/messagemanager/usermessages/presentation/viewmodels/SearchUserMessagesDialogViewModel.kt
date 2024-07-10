@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.profile.presentation.viewmodels
+package com.lovevery.messagemanager.usermessages.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

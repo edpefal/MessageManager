@@ -11,6 +11,7 @@
     <string name="category">Category:</string>
     <string name="messages">Messages:</string>
     <string name="add_message">Add Message</string>
+    <string name="no_messages">There are no messages for this user</string>
     <string name="type_username">Type a username</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
