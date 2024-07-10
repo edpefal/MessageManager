@@ -36,14 +36,14 @@ class AddMessageUseCaseTest {
     }
 
     @Test
-    fun `when adding a message, addMessage in the repository is called`() = runBlocking {
+    fun `when adding a message, addMessage in the repository gets called`() = runBlocking {
         coEvery { messageRepository.addMessage(any()) } returns flowOf(addMessageResponse)
         addMessageUseCase.invoke(addMessageModel)
         coVerify { messageRepository.addMessage(addMessageRequest) }
     }
 
     @Test
-    fun `when adding a message, the message model should match the response `() = runBlocking {
+    fun `when adding a message, addMessageModel should match the response `() = runBlocking {
         coEvery { messageRepository.addMessage(any()) } returns flowOf(addMessageResponse)
         val response = addMessageUseCase.invoke(addMessageModel)
         response.collect {

@@ -1,0 +1,3 @@
+package com.lovevery.messagemanager.usermessages.domain
+
+class GetAllMessagesByUserNameUseCaseTest
