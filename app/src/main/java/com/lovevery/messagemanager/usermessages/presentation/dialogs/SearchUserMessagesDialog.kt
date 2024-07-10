@@ -14,9 +14,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -31,22 +30,14 @@ fun SearchUserMessagesDialog(
     onDismissRequest: () -> Unit,
     onSearch: (String) -> Unit
 ) {
-    //val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        //focusRequester.requestFocus()
-    }
-    //val addMessageUiState by searchUserMessagesViewModel.addMessageUiSate.observeAsState(initial = SearchDialogUiState.Initial)
-    val textUser by searchUserMessagesViewModel.inputUser.observeAsState(initial = "")
-
+    val textUser by searchUserMessagesViewModel.inputUser.collectAsState(initial = "")
 
     Dialog(onDismissRequest = {
-        //searchUserMessagesViewModel.updateUiState(SearchDialogUiState.Initial)
         onDismissRequest()
     }) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
-            //.height(500.dp),
             shape = RoundedCornerShape(16.dp),
             contentColor = Color.LightGray
         ) {
@@ -62,7 +53,6 @@ fun SearchUserMessagesDialog(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                         .fillMaxWidth(),
-                    //.focusRequester(focusRequester),
                     value = textUser,
                     onValueChange = { searchUserMessagesViewModel.onUserText(it) },
                     label = { Text(stringResource(id = R.string.type_username)) })
@@ -76,7 +66,6 @@ fun SearchUserMessagesDialog(
                     OutlinedButton(
                         modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                         onClick = {
-                            //searchUserMessagesViewModel.updateUiState(AddMessageUiState.Empty)
                             onDismissRequest()
                         }) {
                         Text(text = stringResource(id = R.string.cancel))

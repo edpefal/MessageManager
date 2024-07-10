@@ -20,8 +20,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -45,10 +45,10 @@ fun AddMessageDialog(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-    val addMessageUiState by addMessageViewModel.addMessageUiSate.observeAsState(initial = AddMessageUiState.Empty)
-    val textUser by addMessageViewModel.inputUser.observeAsState(initial = "")
-    val textSubject by addMessageViewModel.inputSubject.observeAsState(initial = "")
-    val textMessage by addMessageViewModel.inputMessage.observeAsState(initial = "")
+    val addMessageUiState by addMessageViewModel.addMessageUiSate.collectAsState (initial = AddMessageUiState.Empty)
+    val textUser by addMessageViewModel.inputUser.collectAsState(initial = "")
+    val textSubject by addMessageViewModel.inputSubject.collectAsState(initial = "")
+    val textMessage by addMessageViewModel.inputMessage.collectAsState(initial = "")
 
 
     Dialog(onDismissRequest = {
@@ -58,7 +58,6 @@ fun AddMessageDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
-                //.height(500.dp),
             shape = RoundedCornerShape(16.dp),
             contentColor = Color.LightGray
         ) {
@@ -155,8 +154,6 @@ fun AddMessageDialog(
                     is AddMessageUiState.Empty -> Spacer(modifier = Modifier.height(16.dp))
 
                     is AddMessageUiState.Success -> {
-                        val message =
-                            (addMessageUiState as AddMessageUiState.Success).messageAdded
                         addMessageViewModel.updateUiState(AddMessageUiState.Empty)
                         onDismissRequest()
                     }

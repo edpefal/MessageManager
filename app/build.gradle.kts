@@ -70,6 +70,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+
     implementation("androidx.compose.runtime:runtime-livedata:1.6.4")
     implementation ("androidx.navigation:navigation-compose:2.7.7")
 
@@ -81,4 +83,7 @@ dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    //MockK
+    testImplementation("io.mockk:mockk:1.13.10")
 }

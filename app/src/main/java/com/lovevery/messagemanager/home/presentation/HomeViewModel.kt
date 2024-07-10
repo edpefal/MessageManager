@@ -1,11 +1,11 @@
 package com.lovevery.messagemanager.home.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lovevery.messagemanager.home.domain.GetAllMessagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +15,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val getAllMessagesUseCase: GetAllMessagesUseCase) :
     ViewModel() {
 
-    private val _homeUiSate = MutableLiveData<HomeUiState>()
-    val homeUiSate: LiveData<HomeUiState> get() = _homeUiSate
+    private val _homeUiSate = MutableStateFlow<HomeUiState>(HomeUiState.Empty)
+    val homeUiSate: StateFlow<HomeUiState> get() = _homeUiSate
 
 
     fun getAllMessages() {

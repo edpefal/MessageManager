@@ -32,8 +32,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -51,10 +51,10 @@ import androidx.navigation.NavHostController
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
-import com.lovevery.messagemanager.usermessages.presentation.dialogs.SearchUserMessagesDialog
-import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 import com.lovevery.messagemanager.shared.Routes
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
+import com.lovevery.messagemanager.usermessages.presentation.dialogs.SearchUserMessagesDialog
+import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +70,7 @@ fun HomeScreen(
 
 
 
-    val homeUiState: HomeUiState by homeViewModel.homeUiSate.observeAsState(initial = HomeUiState.Empty)
+    val homeUiState: HomeUiState by homeViewModel.homeUiSate.collectAsState(initial = HomeUiState.Empty)
     val listState = rememberLazyListState()
     var showAddMessageDialog by rememberSaveable { mutableStateOf(false) }
     var showSearchUserMessagesDialog by rememberSaveable { mutableStateOf(false) }

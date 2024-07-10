@@ -1,11 +1,11 @@
 package com.lovevery.messagemanager.addmessage.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lovevery.messagemanager.addmessage.domain.AddMessageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,17 +15,17 @@ import javax.inject.Inject
 class AddMessageViewModel @Inject constructor(private val addMessageUseCase: AddMessageUseCase) :
     ViewModel() {
 
-    private val _addMessageUiSate = MutableLiveData<AddMessageUiState>()
-    val addMessageUiSate: LiveData<AddMessageUiState> get() = _addMessageUiSate
+    private val _addMessageUiSate = MutableStateFlow<AddMessageUiState>(AddMessageUiState.Empty)
+    val addMessageUiSate: StateFlow<AddMessageUiState> get() = _addMessageUiSate
 
-    private val _inputUser = MutableLiveData<String>()
-    val inputUser: LiveData<String> = _inputUser
+    private val _inputUser = MutableStateFlow("")
+    val inputUser: StateFlow<String> = _inputUser
 
-    private val _inputSubject = MutableLiveData<String>()
-    val inputSubject: LiveData<String> = _inputSubject
+    private val _inputSubject = MutableStateFlow<String>("")
+    val inputSubject: StateFlow<String> = _inputSubject
 
-    private val _inputMessage = MutableLiveData<String>()
-    val inputMessage: LiveData<String> = _inputMessage
+    private val _inputMessage = MutableStateFlow<String>("")
+    val inputMessage: StateFlow<String> = _inputMessage
 
     fun onUserText(inputText: String) {
         _inputUser.value = inputText
@@ -40,7 +40,7 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
     }
 
     fun updateUiState(newUIState: AddMessageUiState){
-        _addMessageUiSate.value = AddMessageUiState.Empty
+        _addMessageUiSate.value = newUIState
     }
 
 
@@ -49,9 +49,9 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
             _addMessageUiSate.value = AddMessageUiState.IsLoading(true)
             addMessageUseCase(
                 AddMessageModel(
-                    inputUser.value.orEmpty(),
-                    inputSubject.value.orEmpty(),
-                    inputMessage.value.orEmpty()
+                    inputUser.value,
+                    inputSubject.value,
+                    inputMessage.value
                 )
             )
                 .catch {

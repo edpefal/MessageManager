@@ -1,12 +1,12 @@
 package com.lovevery.messagemanager.usermessages.presentation.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lovevery.messagemanager.usermessages.domain.GetAllMessagesByUserNameUseCase
 import com.lovevery.messagemanager.usermessages.presentation.uistate.UserMessagesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,8 +16,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(private val getAllMessagesByUserNameUseCase: GetAllMessagesByUserNameUseCase) :
     ViewModel() {
 
-    private val _profileUiSate = MutableLiveData<UserMessagesUiState>()
-    val profileUiSate: LiveData<UserMessagesUiState> get() = _profileUiSate
+    private val _profileUiSate = MutableStateFlow<UserMessagesUiState>(UserMessagesUiState.Empty)
+    val profileUiSate: StateFlow<UserMessagesUiState> get() = _profileUiSate
 
 
     fun getAllMessagesByUserName(userName: String) {

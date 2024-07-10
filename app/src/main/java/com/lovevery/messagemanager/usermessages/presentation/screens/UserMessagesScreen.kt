@@ -20,8 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +49,7 @@ fun UserMessagesScreen(
 
     ) {
     profileViewModel.getAllMessagesByUserName(userName)
-    val postUiState: UserMessagesUiState by profileViewModel.profileUiSate.observeAsState(
+    val postUiState: UserMessagesUiState by profileViewModel.profileUiSate.collectAsState(
         initial = UserMessagesUiState.Loading
     )
     val scrollState = rememberScrollState()
