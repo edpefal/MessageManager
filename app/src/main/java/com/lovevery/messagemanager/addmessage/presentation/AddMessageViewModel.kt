@@ -21,10 +21,10 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
     private val _inputUser = MutableStateFlow("")
     val inputUser: StateFlow<String> = _inputUser
 
-    private val _inputSubject = MutableStateFlow<String>("")
+    private val _inputSubject = MutableStateFlow("")
     val inputSubject: StateFlow<String> = _inputSubject
 
-    private val _inputMessage = MutableStateFlow<String>("")
+    private val _inputMessage = MutableStateFlow("")
     val inputMessage: StateFlow<String> = _inputMessage
 
     fun onUserText(inputText: String) {
