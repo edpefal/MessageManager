@@ -11,33 +11,60 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        letterSpacing = 0.5.sp,
+        color = MessageManagerSecondary
     ),
 
-    /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 24.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 0.sp,
+        color = MessageManagerPrimary
+
     ),
+    titleMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        color = MessageManagerSecondary
+    ),
+
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
-    )
-    */
+    ),
+
+    displaySmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.sp,
+        color = MessageManagerPrimary
+    ),
+
+
 )
 
 object CustomTextStyles {
 
-    val errorStyle = TextStyle(
+    val errorMedium = TextStyle(
         fontSize = 18.sp,
+        fontWeight = FontWeight.Normal,
+        color = ErrorColor,
+        fontFamily = FontFamily.Default
+    )
+
+    val errorSmall = TextStyle(
+        fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         color = ErrorColor,
         fontFamily = FontFamily.Default

@@ -1,7 +1,6 @@
 package com.lovevery.messagemanager.usermessages.presentation.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,12 +54,7 @@ fun UserMessagesScreen(
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-        ) {
+        Column(modifier = Modifier.padding(paddingValues)) {
             Header(stringResource(id = R.string.header_user_messages)) {
                 coroutineScope.launch {
                     navController.popBackStack()
@@ -69,20 +63,29 @@ fun UserMessagesScreen(
             }
             when (postUiState) {
                 UserMessagesUiState.Error -> Box(
-                    modifier = Modifier.fillMaxSize().background(Color.Red),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+
                 ) {
                     Text(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+
+                            .padding(16.dp),
                         text = stringResource(id = R.string.no_messages),
-                        style = MaterialTheme.typography.displayMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center
                     )
                 }
 
                 UserMessagesUiState.Loading -> Text(text = "Loading")
                 is UserMessagesUiState.Success -> {
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            //.padding(paddingValues)
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                    ) {
 
                         Image(
                             painter = painterResource(id = R.drawable.ic_profile),
@@ -115,6 +118,7 @@ fun UserMessagesScreen(
             }
 
         }
+
     }
 }
 

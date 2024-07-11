@@ -4,12 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,6 +46,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
@@ -67,7 +68,6 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         homeViewModel.getAllMessages()
     }
-
 
 
     val homeUiState: HomeUiState by homeViewModel.homeUiSate.collectAsState(initial = HomeUiState.Empty)
@@ -96,7 +96,9 @@ fun HomeScreen(
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "",
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(40.dp),
+                            tint = MaterialTheme.colorScheme.tertiary
+
                         )
                     }
                 }
@@ -145,13 +147,12 @@ fun HomeScreen(
                 )
 
                 HomeUiState.Empty -> EmptyState(
-                    paddingValues,
                     showAddMessageDialog,
                     showSearchUserMessagesDialog,
                     addMessageViewModel,
                     searchUserMessagesDialogViewModel,
                     onDismissDialog = {
-                       handleDismiss()
+                        handleDismiss()
                     },
                     onSearchUser = { username ->
                         goToUserMessagesScreen(navController, username)
@@ -165,7 +166,6 @@ fun HomeScreen(
 
 @Composable
 private fun EmptyState(
-    paddingValues: PaddingValues,
     showDialog: Boolean,
     showSearchUserMessagesDialog: Boolean,
     addMessageViewModel: AddMessageViewModel,
@@ -173,28 +173,43 @@ private fun EmptyState(
     onDismissDialog: () -> Unit,
     onSearchUser: (String) -> Unit
 ) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = stringResource(id = R.string.no_messages_found),
-            Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(paddingValues)
-                .fillMaxSize(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
+    val composition by rememberLottieComposition(LottieCompositionSpec.Url("https://lottie.host/3f1838ad-3a26-44d3-9702-6cbad54415f1/niSdGorv8I.json"))
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                //.fillMaxSize()
 
-        )
-        if (showDialog) {
-            AddMessageDialog(
-                addMessageViewModel = addMessageViewModel, onDismissDialog
+        ) {
+            Text(
+                text = stringResource(id = R.string.no_messages_found),
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
+
             )
-        }
-        if (showSearchUserMessagesDialog) {
-            SearchUserMessagesDialog(
-                searchUserMessagesViewModel = searchUserMessagesDialogViewModel,
-                onDismissDialog,
-                onSearchUser
+            LottieAnimation(
+                composition = composition,
+                iterations = Int.MAX_VALUE,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .size(200.dp)
             )
+
+            if (showDialog) {
+                AddMessageDialog(
+                    addMessageViewModel = addMessageViewModel, onDismissDialog
+                )
+            }
+            if (showSearchUserMessagesDialog) {
+                SearchUserMessagesDialog(
+                    searchUserMessagesViewModel = searchUserMessagesDialogViewModel,
+                    onDismissDialog,
+                    onSearchUser
+                )
+            }
         }
     }
 }
@@ -207,82 +222,84 @@ fun MessageItem(
     totalMessages: Int,
     onClick: () -> Unit? = {},
 ) {
-    Card(
-        modifier = Modifier
-            .height(dimensionResource(id = R.dimen.message_item_height))
-            .fillMaxWidth()
-            .padding(
-                vertical = dimensionResource(id = R.dimen.default_vertical_padding),
-                horizontal = dimensionResource(id = R.dimen.default_margin)
-            ),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
-    ) {
-        Column {
-            Row(Modifier.padding(bottom = 8.dp)) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_profile),
-                    contentDescription = "profile",
-                    modifier = Modifier
-                        .size(dimensionResource(id = R.dimen.image_message_size))
-                        .padding(start = 8.dp, top = 8.dp)
-                )
+    Row {
+        Image(
+            painter = painterResource(id = R.drawable.ic_profile),
+            contentDescription = "profile",
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.image_message_size))
+                .padding(start = 8.dp)
+        )
+        Card(
+            modifier = Modifier
+                //.height(dimensionResource(id = R.dimen.message_item_height))
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
+        ) {
+            Column {
+                Row(Modifier.padding(bottom = 8.dp, start = 8.dp)) {
+                    Text(
+                        text = user,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.titleLarge,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .weight(1f)
+
+                    )
+                    Text(
+                        text = stringResource(id = R.string.total_messages, totalMessages),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
                 Text(
-                    text = user,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .weight(1f)
-                )
-                Text(
-                    text = stringResource(id = R.string.total_messages, totalMessages),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            Text(
-                text = stringResource(id = R.string.last_message),
-                Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
-                fontSize = 18.sp,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = message,
-                Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                    .weight(1f),
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 2
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = stringResource(id = R.string.category),
-                    style = MaterialTheme.typography.labelLarge,
+                    text = stringResource(id = R.string.last_message),
+                    Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    fontSize = 18.sp,
                     overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = subject,
-                    modifier = Modifier.padding(start = 4.dp, end = 16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = message,
+                    Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 0.dp),
                     overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1
                 )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
-            ) {
-                OutlinedButton(
-                    onClick = { onClick() },
-                    modifier = Modifier.align(Alignment.CenterEnd)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = stringResource(id = R.string.all_messages))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = stringResource(id = R.string.category),
+                        style = MaterialTheme.typography.labelLarge,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        text = subject,
+                        modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = { onClick() },
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    ) {
+                        Text(text = stringResource(id = R.string.all_messages))
+                    }
                 }
             }
         }
@@ -340,7 +357,14 @@ private fun goToUserMessagesScreen(
 
 @Composable
 fun AddMessageButtonFAB(onClickAddMessage: () -> Unit) {
-    FloatingActionButton(onClick = onClickAddMessage) {
-        Icon(Icons.Default.Create, contentDescription = stringResource(id = R.string.add_message))
+    FloatingActionButton(
+        onClick = onClickAddMessage,
+        containerColor = MaterialTheme.colorScheme.tertiary
+    ) {
+        Icon(
+            Icons.Default.Create,
+            contentDescription = stringResource(id = R.string.add_message),
+            tint = Color.White
+        )
     }
 }

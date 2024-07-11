@@ -12,3 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 val titleColor = Color(0xFF4652EB)
 
 val ErrorColor = Color(0xF7C70606)
+
+val MessageManagerPrimary = Color(0xFF00476b)
+val MessageManagerSecondary = Color(0xFF354552)
+val MessageManagerTertiary = Color(0xFF493d5e)

@@ -5,7 +5,7 @@
     <string name="loading">Loading…</string>
     <string name="fetching_data">Fetching some data…</string>
     <string name="total_messages">Messages: %1$d</string>
-    <string name="last_message">Last Message</string>
+    <string name="last_message">Last Message:</string>
     <string name="all_messages">All Messages</string>
     <string name="header_user_messages">User Messages</string>
     <string name="category">Category:</string>
@@ -13,8 +13,12 @@
     <string name="add_message">Add Message</string>
     <string name="no_messages">There are no messages for this user</string>
     <string name="type_username">Type a username</string>
+    <string name="username">Username</string>
+    <string name="subject">Subject</string>
+    <string name="message">Message</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
     <string name="no_messages_found">No messages found, try adding a new one</string>
+    <string name="required_field">Required field</string>
 
 </resources>

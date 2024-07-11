@@ -5,7 +5,7 @@
     <dimen name="message_default_margin">8dp</dimen>
     <dimen name="default_margin">16dp</dimen>
     <dimen name="default_vertical_padding">16dp</dimen>
-    <dimen name="message_item_height">300dp</dimen>
+    <dimen name="message_item_height">280dp</dimen>
     <dimen name="profile_message_item_height">150dp</dimen>
     <dimen name="message_card_elevation">6dp</dimen>
     <dimen name="image_message_size">50dp</dimen>

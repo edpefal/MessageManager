@@ -77,7 +77,7 @@ class AddMessageViewModelTest {
         advanceUntilIdle()
 
         assert(
-            addMessageViewModel.addMessageUiSate.value == AddMessageUiState.Error
+            addMessageViewModel.addMessageUiSate.value == AddMessageUiState.ResponseError
         )
     }
 
