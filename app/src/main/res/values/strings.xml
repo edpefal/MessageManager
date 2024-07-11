@@ -11,7 +11,7 @@
     <string name="category">Category:</string>
     <string name="messages">Messages:</string>
     <string name="add_message">Add Message</string>
-    <string name="no_messages">There are no messages for this user</string>
+    <string name="no_messages">There are no messages for %1$s</string>
     <string name="type_username">Type a username</string>
     <string name="username">Username</string>
     <string name="subject">Subject</string>
@@ -20,5 +20,10 @@
     <string name="search">Search</string>
     <string name="no_messages_found">No messages found, try adding a new one</string>
     <string name="required_field">Required field</string>
+    <string name="profile_image">Profile image</string>
+    <string name="empty_spaces_error">Spaces are not allowed</string>
+    <string name="user_messages_animation_url" translatable="false">https://lottie.host/73df2f9f-ed5e-4454-b227-d4ad51efc424/Cduf91VHpT.json</string>
+    <string name="home_animation_url" translatable="false">https://lottie.host/3f1838ad-3a26-44d3-9702-6cbad54415f1/niSdGorv8I.json</string>
+
 
 </resources>

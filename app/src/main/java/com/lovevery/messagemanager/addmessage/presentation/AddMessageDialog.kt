@@ -22,21 +22,19 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lovevery.messagemanager.R
+import com.lovevery.messagemanager.shared.composables.MediumPadding
 import com.lovevery.messagemanager.ui.theme.CustomTextStyles
 
 @Composable
@@ -45,15 +43,11 @@ fun AddMessageDialog(
     onDismissRequest: () -> Unit,
 
     ) {
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+
     val addMessageUiState by addMessageViewModel.addMessageUiSate.collectAsState(initial = AddMessageUiState.Empty)
     val textUser by addMessageViewModel.inputUser.collectAsState(initial = "")
     val textSubject by addMessageViewModel.inputSubject.collectAsState(initial = "")
     val textMessage by addMessageViewModel.inputMessage.collectAsState(initial = "")
-
 
     Dialog(onDismissRequest = {
         addMessageViewModel.updateUiState(AddMessageUiState.Empty)
@@ -70,7 +64,11 @@ fun AddMessageDialog(
                     text = stringResource(id = R.string.add_message),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        .padding(
+                            start = MediumPadding(),
+                            end = MediumPadding(),
+                            top = MediumPadding()
+                        ),
                     style = MaterialTheme.typography.titleLarge,
                 )
 
@@ -78,7 +76,6 @@ fun AddMessageDialog(
                 when (addMessageUiState) {
                     is AddMessageUiState.IsLoading -> {
                         DialogContent(
-                            focusRequester,
                             textUser,
                             InputErrorType.NONE,
                             true,
@@ -91,14 +88,13 @@ fun AddMessageDialog(
                         Text(
                             text = stringResource(id = R.string.loading), modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(MediumPadding()),
                             textAlign = TextAlign.Center
                         )
                     }
 
                     is AddMessageUiState.ResponseError -> {
                         DialogContent(
-                            focusRequester,
                             textUser,
                             InputErrorType.NONE,
                             false,
@@ -110,7 +106,7 @@ fun AddMessageDialog(
                         Text(
                             text = stringResource(id = R.string.error_text), modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(MediumPadding()),
                             textAlign = TextAlign.Center,
                             style = CustomTextStyles.errorMedium
                         )
@@ -118,7 +114,6 @@ fun AddMessageDialog(
 
                     is AddMessageUiState.Empty -> {
                         DialogContent(
-                            focusRequester,
                             textUser,
                             InputErrorType.NONE,
                             false,
@@ -127,13 +122,12 @@ fun AddMessageDialog(
                             textMessage,
                             onDismissRequest
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(MediumPadding()))
                     }
 
 
                     is AddMessageUiState.Success -> {
                         DialogContent(
-                            focusRequester,
                             textUser,
                             InputErrorType.NONE,
                             false,
@@ -150,7 +144,6 @@ fun AddMessageDialog(
                         val errorType =
                             (addMessageUiState as AddMessageUiState.InputError).inputErrorType
                         DialogContent(
-                            focusRequester,
                             textUser,
                             errorType,
                             false,
@@ -159,7 +152,7 @@ fun AddMessageDialog(
                             textMessage,
                             onDismissRequest
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(MediumPadding()))
                     }
 
                 }
@@ -168,9 +161,9 @@ fun AddMessageDialog(
     }
 }
 
+
 @Composable
 private fun DialogContent(
-    focusRequester: FocusRequester,
     textUser: String,
     errorType: InputErrorType,
     isLoading: Boolean,
@@ -179,31 +172,35 @@ private fun DialogContent(
     textMessage: String,
     onDismissRequest: () -> Unit
 ) {
+    var errorMessage = stringResource(id = R.string.required_field)
+    if (addMessageViewModel.isErrorTypeInvalidCharacters(errorType)) {
+        errorMessage = stringResource(id = R.string.empty_spaces_error)
+    }
     AddMessageTextField(
-        focusRequester,
         textUser,
         stringResource(id = R.string.username),
-        errorType == InputErrorType.USERNAME
+        addMessageViewModel.isErrorTypeInvalidCharsOrUsernameRequired(errorType),
+        errorMessage,
     ) {
         addMessageViewModel.onUserText(
             it
         )
     }
     AddMessageTextField(
-        focusRequester,
         textSubject,
         stringResource(id = R.string.subject),
-        errorType == InputErrorType.SUBJECT
+        addMessageViewModel.isErrorTypeSubject(errorType),
+        errorMessage
     ) {
         addMessageViewModel.onSubjectText(
             it
         )
     }
     AddMessageTextField(
-        focusRequester,
         textMessage,
         stringResource(id = R.string.message),
-        errorType == InputErrorType.MESSAGE
+        addMessageViewModel.isErrorTypeMessage(errorType),
+        errorMessage
     ) {
         addMessageViewModel.onMessageText(
             it
@@ -223,10 +220,10 @@ private fun ButtonSection(
         Spacer(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                .padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding())
         )
         OutlinedButton(
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+            modifier = Modifier.padding(start = MediumPadding(), top = MediumPadding()),
             border = BorderStroke(color = MaterialTheme.colorScheme.tertiary, width = 1.dp),
             onClick = {
                 addMessageViewModel.updateUiState(AddMessageUiState.Empty)
@@ -238,7 +235,7 @@ private fun ButtonSection(
             )
         }
         Button(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+            modifier = Modifier.padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding()),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 contentColor = Color.White
@@ -262,9 +259,9 @@ private fun ButtonSection(
                 )
                 if (showLoading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.circular_progress_size)),
                         color = Color.White,
-                        strokeWidth = 2.dp
+                        strokeWidth = dimensionResource(id = R.dimen.circular_progress_stroke)
                     )
                 }
             }
@@ -276,26 +273,28 @@ private fun ButtonSection(
 
 @Composable
 private fun AddMessageTextField(
-    focusRequester: FocusRequester,
-    textUser: String,
+    text: String,
     label: String,
-    isError: Boolean,
+    showError: Boolean,
+    errorMessage: String,
     onTextChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
-
-        isError = isError,
+            .padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding())
+            .fillMaxWidth(),
+        isError = showError,
         supportingText = {
-            if (isError) Text(text = stringResource(id = R.string.required_field), style = CustomTextStyles.errorSmall
-        ) },
+            if (showError) {
+                Text(
+                    text = errorMessage,
+                    style = CustomTextStyles.errorSmall
+                )
+            }
+        },
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.tertiary,
             unfocusedTextColor = MaterialTheme.colorScheme.tertiary,
-            //disabledTextColor = Color.DarkGray,
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,
             cursorColor = MaterialTheme.colorScheme.tertiary,
@@ -303,7 +302,7 @@ private fun AddMessageTextField(
             unfocusedBorderColor = MaterialTheme.colorScheme.tertiary,
 
             ),
-        value = textUser,
+        value = text,
         onValueChange = { onTextChange(it) },
         label = { Text(label) })
 }

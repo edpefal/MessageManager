@@ -18,6 +18,9 @@ class AddMessageViewModelTest {
     private lateinit var addMessageViewModel: AddMessageViewModel
     private lateinit var addMessageUseCase: AddMessageUseCase
     private val testDispatcher = StandardTestDispatcher()
+    val username = "username"
+    val subject = "subject"
+    val message = "message"
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -25,33 +28,30 @@ class AddMessageViewModelTest {
         addMessageUseCase = mockk()
         addMessageViewModel = AddMessageViewModel(addMessageUseCase)
         Dispatchers.setMain(testDispatcher)
+        addMessageViewModel.onSubjectText(subject)
+        addMessageViewModel.onMessageText(message)
+        addMessageViewModel.onUserText(username)
     }
 
     @Test
     fun `when user types the username inputUser gets updated`() {
-        val username = "username"
-        addMessageViewModel.onUserText(username)
         assert(addMessageViewModel.inputUser.value == username)
     }
 
     @Test
     fun `when user types the subject inputSubject gets updated`() {
-        val subject = "subject"
-        addMessageViewModel.onSubjectText(subject)
         assert(addMessageViewModel.inputSubject.value == subject)
     }
 
     @Test
     fun `when user types the message inputMessage gets updated`() {
-        val message = "message"
-        addMessageViewModel.onSubjectText(message)
-        assert(addMessageViewModel.inputSubject.value == message)
+        assert(addMessageViewModel.inputMessage.value == message)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when a message is added the UiState is updated with a success state`() = runTest {
-        val addMessageModel = AddMessageModel("user", "subject", "message")
+        val addMessageModel = AddMessageModel(username, subject, message)
         coEvery { addMessageUseCase(any()) } returns flow {
             emit(addMessageModel)
         }

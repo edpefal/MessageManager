@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lovevery.messagemanager.R
+import com.lovevery.messagemanager.shared.composables.MediumPadding
 import com.lovevery.messagemanager.ui.theme.CustomTextStyles
 import com.lovevery.messagemanager.usermessages.presentation.uistate.SearchDialogUiState
 import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
@@ -44,7 +45,7 @@ fun SearchUserMessagesDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(MediumPadding()),
             contentColor = Color.LightGray
         ) {
             Column {
@@ -52,7 +53,7 @@ fun SearchUserMessagesDialog(
                     text = stringResource(id = R.string.search),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        .padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding()),
                     style = MaterialTheme.typography.titleLarge,
                 )
                 when (searchDialogUiState) {
@@ -77,14 +78,14 @@ fun SearchUserMessagesDialog(
                 }
 
 
-                Row(Modifier.padding(bottom = 16.dp)) {
+                Row(Modifier.padding(bottom = MediumPadding())) {
                     Spacer(
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                            .padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding())
                     )
                     OutlinedButton(
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                        modifier = Modifier.padding(start = MediumPadding(), top = MediumPadding()),
                         border = BorderStroke(
                             color = MaterialTheme.colorScheme.tertiary,
                             width = 1.dp
@@ -98,7 +99,7 @@ fun SearchUserMessagesDialog(
                         )
                     }
                     Button(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        modifier = Modifier.padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding()),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.tertiary,
                             contentColor = Color.White
@@ -125,7 +126,7 @@ private fun DialogContent(
 ) {
     OutlinedTextField(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+            .padding(start = MediumPadding(), end = MediumPadding(), top = MediumPadding())
             .fillMaxWidth(),
         isError = showError,
         supportingText = {

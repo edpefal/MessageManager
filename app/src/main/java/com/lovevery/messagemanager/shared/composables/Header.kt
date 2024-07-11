@@ -1,4 +1,4 @@
-package com.lovevery.messagemanager.shared.widgets
+package com.lovevery.messagemanager.shared.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

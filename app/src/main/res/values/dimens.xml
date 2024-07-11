@@ -9,4 +9,14 @@
     <dimen name="profile_message_item_height">150dp</dimen>
     <dimen name="message_card_elevation">6dp</dimen>
     <dimen name="image_message_size">50dp</dimen>
+
+    <dimen name="extra_small_padding">4dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="medium_padding">16dp</dimen>
+    <dimen name="circular_progress_stroke">2dp</dimen>
+    <dimen name="circular_progress_size">30dp</dimen>
+    <dimen name="search_icon_size">40dp</dimen>
+    <dimen name="animation_size">200dp</dimen>
+    <dimen name="profile_image_size">150dp</dimen>
+
 </resources>

@@ -28,10 +28,12 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
     val inputMessage: StateFlow<String> = _inputMessage
 
     private val inputList = listOf(
-        inputUser to InputErrorType.USERNAME,
-        inputSubject to InputErrorType.SUBJECT,
-        inputMessage to InputErrorType.MESSAGE
+        inputUser to InputErrorType.USERNAME_REQUIRED,
+        inputSubject to InputErrorType.SUBJECT_REQUIRED,
+        inputMessage to InputErrorType.MESSAGE_REQUIRED
     )
+
+    private val invalidCharacters = listOf(" ")
 
     fun onUserText(inputText: String) {
         _inputUser.value = inputText
@@ -79,15 +81,24 @@ class AddMessageViewModel @Inject constructor(private val addMessageUseCase: Add
     private fun isValidInput(): Boolean {
         for ((input, errorType) in inputList) {
             if (input.value.isEmpty()) {
-                _addMessageUiSate.value = AddMessageUiState.InputError(errorType)
+                updateUiState(AddMessageUiState.InputError(errorType))
+                return false
+            }
+            if (input == inputUser && invalidCharacters.any { it in input.value }) {
+                updateUiState(AddMessageUiState.InputError(InputErrorType.INVALID_CHARACTERS))
                 return false
             }
         }
         return true
     }
 
+    fun isErrorTypeInvalidCharacters(errorType: InputErrorType) =
+        errorType == InputErrorType.INVALID_CHARACTERS
 
-
+    fun isErrorTypeSubject(errorType: InputErrorType) = errorType == InputErrorType.SUBJECT_REQUIRED
+    fun isErrorTypeMessage(errorType: InputErrorType) = errorType == InputErrorType.MESSAGE_REQUIRED
+    fun isErrorTypeInvalidCharsOrUsernameRequired(errorType: InputErrorType) =
+        errorType == InputErrorType.INVALID_CHARACTERS || errorType == InputErrorType.USERNAME_REQUIRED
 
 
 }

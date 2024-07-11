@@ -43,8 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -53,6 +51,9 @@ import com.lovevery.messagemanager.R
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageDialog
 import com.lovevery.messagemanager.addmessage.presentation.AddMessageViewModel
 import com.lovevery.messagemanager.shared.Routes
+import com.lovevery.messagemanager.shared.composables.ExtraSmallPadding
+import com.lovevery.messagemanager.shared.composables.MediumPadding
+import com.lovevery.messagemanager.shared.composables.SmallPadding
 import com.lovevery.messagemanager.shared.presentation.UserMessageModel
 import com.lovevery.messagemanager.usermessages.presentation.dialogs.SearchUserMessagesDialog
 import com.lovevery.messagemanager.usermessages.presentation.viewmodels.SearchUserMessagesDialogViewModel
@@ -96,7 +97,7 @@ fun HomeScreen(
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "",
-                            modifier = Modifier.size(40.dp),
+                            modifier = Modifier.size(dimensionResource(id = R.dimen.search_icon_size)),
                             tint = MaterialTheme.colorScheme.tertiary
 
                         )
@@ -173,12 +174,11 @@ private fun EmptyState(
     onDismissDialog: () -> Unit,
     onSearchUser: (String) -> Unit
 ) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.Url("https://lottie.host/3f1838ad-3a26-44d3-9702-6cbad54415f1/niSdGorv8I.json"))
+    val composition by rememberLottieComposition(LottieCompositionSpec.Url(stringResource(id = R.string.home_animation_url)))
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
-                //.fillMaxSize()
+                .padding(MediumPadding())
 
         ) {
             Text(
@@ -195,7 +195,7 @@ private fun EmptyState(
                 iterations = Int.MAX_VALUE,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .size(200.dp)
+                    .size(dimensionResource(id = R.dimen.animation_size))
             )
 
             if (showDialog) {
@@ -228,45 +228,48 @@ fun MessageItem(
             contentDescription = "profile",
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.image_message_size))
-                .padding(start = 8.dp)
+                .padding(start = SmallPadding())
         )
         Card(
             modifier = Modifier
-                //.height(dimensionResource(id = R.dimen.message_item_height))
                 .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 16.dp),
+                .padding(
+                    top = SmallPadding(),
+                    bottom = SmallPadding(),
+                    start = SmallPadding(),
+                    end = MediumPadding()
+                ),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.message_card_elevation))
         ) {
             Column {
-                Row(Modifier.padding(bottom = 8.dp, start = 8.dp)) {
+                Row(Modifier.padding(bottom = SmallPadding(), start = SmallPadding())) {
                     Text(
                         text = user,
                         maxLines = 1,
                         style = MaterialTheme.typography.titleLarge,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(SmallPadding())
                             .weight(1f)
 
                     )
                     Text(
                         text = stringResource(id = R.string.total_messages, totalMessages),
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(MediumPadding())
                     )
                 }
                 Text(
                     text = stringResource(id = R.string.last_message),
-                    Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                    fontSize = 18.sp,
+                    Modifier.padding(start = MediumPadding(), end = MediumPadding(), bottom = MediumPadding()),
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
                     text = message,
                     Modifier
-                        .padding(start = 16.dp, end = 16.dp, bottom = 0.dp),
+                        .padding(start = MediumPadding(), end = MediumPadding()),
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyLarge,
                     maxLines = 1
@@ -283,7 +286,7 @@ fun MessageItem(
                     )
                     Text(
                         text = subject,
-                        modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                        modifier = Modifier.padding(start = ExtraSmallPadding(), end = MediumPadding()),
                         style = MaterialTheme.typography.bodyMedium,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
@@ -292,7 +295,7 @@ fun MessageItem(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                        .padding(horizontal = MediumPadding(), vertical = MediumPadding())
                 ) {
                     OutlinedButton(
                         onClick = { onClick() },
