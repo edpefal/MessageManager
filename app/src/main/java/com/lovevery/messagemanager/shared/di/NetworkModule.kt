@@ -6,7 +6,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -18,18 +17,19 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitHelper(): Retrofit {
-        val logging = HttpLoggingInterceptor()
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
-
+    fun provideRetrofitHelper(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://abraxvasbh.execute-api.us-east-2.amazonaws.com/proto/")
             .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient.build())
+            .client(okHttpClient)
             .build()
     }
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
 
     @Provides
     @Singleton
