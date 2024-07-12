@@ -10,8 +10,9 @@ The scope of this project is to build a native Android application that interact
 ### Screenshots
 
 <p align="center">
-    <img src="images/image6.png" alt="Home Screen" width="300"/>
-    <img src="images/image1.png" alt="Detail Screen" width="300"/>
+    <img src="images/image6.png" alt="Home Screen" width="250"/>
+    <img src="images/image3.png" alt="Detail Screen" width="250"/>
+    <img src="images/image1.png" alt="Detail Screen" width="250"/>
 </p>
 
 ### Architecture
