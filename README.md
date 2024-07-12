@@ -159,10 +159,21 @@ I added Test Cases for ViewModels and UseCases using JUnit and MockK.
     }
 ```
 
+# Installation
+To get started with the project, follow these steps:
+
+- Clone this repository to your local machine using the following command
+  ```
+  git clone https://github.com/edpefal/messagemanager.git
+  ```
+- Open the project in Android Studio or your preferred IDE.
+
+- Build and run the project on an Android emulator or physical device.
+
+- Once the application is up and running, you can start searching for specific Pokemon, check their details, as well as add or remove pokemons from your team.  .
 
 ## Roadmap
 
 - Add Android UI tests using Espresso
 
 - Add a screen to display messages by category
-
