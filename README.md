@@ -11,37 +11,37 @@ The scope of this project is to build a native Android application that interact
 The application follows a Clean Architecture approach, with a clear separation between the UI, domain, and data layers.
 
 - **Presentation Layer**:
-    - **View (UI)**: Composable functions and UI components built with Jetpack Compose.
-    - **ViewModel**: Handles UI-related data and business logic, communicating with UseCases.
+  - **View (UI)**: Composable functions and UI components built with Jetpack Compose.
+  - **ViewModel**: Handles UI-related data and business logic, communicating with UseCases.
 
 - **Domain Layer**:
-    - **UseCases**: Encapsulate specific business logic and interact with the repository.
-    - **Repository Definitions**: Defines the contracts that will be use by the Repository Implementation.
+  - **UseCases**: Encapsulate specific business logic and interact with the repository.
+  - **Repository Definitions**: Defines the contracts that will be use by the Repository Implementation.
 
 - **Data Layer**:
-    - **Repository Implementation**: Manages data operations, handling data sources (network, database).
-    - **Data Sources**: API service for network operations.
+  - **Repository Implementation**: Manages data operations, handling data sources (network, database).
+  - **Data Sources**: API service for network operations.
 
 ### Design Decisions and Trade-offs
 
 1. **Architecture Choice**: Clean Architecture ensures a scalable, maintainable, and testable codebase with a clear separation of concerns.
-    - **Trade-off**: Increased initial complexity and development time.
+  - **Trade-off**: Increased initial complexity and development time.
 
 2. **Jetpack Compose**: Used for building the UI due to its modern declarative approach and integration with Kotlin.
-    - **Trade-off**: Learning curve and potential compatibility issues with older devices.
+  - **Trade-off**: Learning curve and potential compatibility issues with older devices.
 
 3. **Kotlin Coroutines**: Used for managing asynchronous tasks to simplify threading and improve readability.
-    - **Trade-off**: Requires understanding of coroutines and proper handling of lifecycle.
+  - **Trade-off**: Requires understanding of coroutines and proper handling of lifecycle.
 
 4. **Dependency Injection**: Hilt is used for dependency injection to manage dependencies and improve testability.
-    - **Trade-off**: Requires initial setup and understanding of Dagger/Hilt.
+  - **Trade-off**: Requires initial setup and understanding of Dagger/Hilt.
 
 5. **Input Data Validation**: All input message fields (subject, username, message) are required to maintain consistency across the app, and prevent messages without a user or message. Blank spaces are also not allowed in the username, since it was impossible to retrieve those messages using the search by username endpoint.
-    - **Trade-off**: It is not possible to have messages with a username like John Doe (with a blank space).
+  - **Trade-off**: It is not possible to have messages with a username like John Doe (with a blank space).
 
 5. **Display messages**: The home screen of the application displays messages grouped by user in separate cards. This design choice was made because the message list endpoint's response lacked a predefined key for the username, resulting in each username becoming a unique key. Consequently, a Map data structure was used to identify each key and obtain the message list for each user. Therefore, the decision to maintain the grouping using user cards was based on the response structure and is reflected in the visual representation on the application's home screen. (While it is possible to flatten the list of messages within the list of cards, I believe that the current approach would help keep all the information organized.)
 
-    - **Trade-off**: It is not possible to view a single list with all the messages.
+  - **Trade-off**: It is not possible to view a single list with all the messages.
 
 ### UI Design
 
@@ -82,58 +82,58 @@ Verify that the application correctly interacts with the REST API to POST and GE
 **Manual Testing**:
 
 - **Post Message**:
-    1. Click on the FAB button located in the lower right corner of the home screen
-    2. Enter valid data (user, subject, message) for all the fields in the dialog, and click on the Add Message Button.
-    3. Verify that a card is successfully added to the list of cards on the home screen (Each card groups all the messages of a specific user.)
+  - Click on the FAB button located in the lower right corner of the home screen
+  - Enter valid data (user, subject, message) for all the fields in the dialog, and click on the Add Message Button.
+  - Verify that a card is successfully added to the list of cards on the home screen (Each card groups all the messages of a specific user.)
 
 
 - **Get multiple messages by user**:
-    1. Post a first message following the steps explained in the previous case.
-    2. Post a second message using the same user as the previous case.
-    3. Verify that the message count per user is incremented in the top right corner of the card on the home screen.
+  - Post a first message following the steps explained in the previous case.
+  - Post a second message using the same user as the previous case.
+  - Verify that the message count per user is incremented in the top right corner of the card on the home screen.
 
 - **Get multiple messages by user**:
-    1. Post a first message following the steps explained in the previous case.
-    2. Post a second message using the same user as the previous case.
-    3. Verify that the message count per user is incremented in the top right corner of the card on the home screen.
+  - Post a first message following the steps explained in the previous case.
+  - Post a second message using the same user as the previous case.
+  - Verify that the message count per user is incremented in the top right corner of the card on the home screen.
 
 - **Show all the messages of a user**:
-    1.  Add at least one message following the steps in the previous cases.
-    2. Click on the "All Messages" button located in the bottom right corner of a user's card in the home screen
-    3. Verify that the user's messages screen is displayed, showing all of their messages
+  -  Add at least one message following the steps in the previous cases.
+  - Click on the "All Messages" button located in the bottom right corner of a user's card in the home screen
+  - Verify that the user's messages screen is displayed, showing all of their messages
 
 - **Search messages by username**:
-    1.  Click on the search button located in the upper right corner of the screen.
-    2. Enter the username in the dialog that appears
-    3. Click on the search button
-    3. Verify that the user's messages screen is displayed, showing all the messages of that user
+  -  Click on the search button located in the upper right corner of the screen.
+  - Enter the username in the dialog that appears
+  - Click on the search button
+  - Verify that the user's messages screen is displayed, showing all the messages of that user
 
 - **Search messages for a user that doesn't exist**:
-    1.  Click on the search button located in the upper right corner of the screen.
-    2. Enter a username that doesn't have any messages
-    3. Click on the search button
-    3. Verify that the user's messages screen is displayed, indicating they don't have any messages.
+  -  Click on the search button located in the upper right corner of the screen.
+  - Enter a username that doesn't have any messages
+  - Click on the search button
+  - Verify that the user's messages screen is displayed, indicating they don't have any messages.
 
 - **Invalid search**:
-    1.  Click on the search button located in the upper right corner of the screen.
-    2. Leave the username field blank
-    3. Click on the search button
-    3. Verify that an error message is displayed
+  -  Click on the search button located in the upper right corner of the screen.
+  - Leave the username field blank
+  - Click on the search button
+  - Verify that an error message is displayed
 
 
 - **Empty fields when posting a message**:
-    1. Click on the FAB button located in the lower right corner of the home
-       screen
-    2. Leave one or multiple fields (user, subject, message) blank in the dialog
-    3. Click Add Message Button
-    3. Verify that an error message is displayed
+  - Click on the FAB button located in the lower right corner of the home
+    screen
+  - Leave one or multiple fields (user, subject, message) blank in the dialog
+  - Click Add Message Button
+  - Verify that an error message is displayed
 
 - **Invalid username data when posting a message**:
-    1. Click on the FAB button located in the lower right corner of the home
-       screen
-    2. Type a username with a space character
-    3. Click Add Message Button
-    3. Verify that an error message is displayed
+  - Click on the FAB button located in the lower right corner of the home
+    screen
+  - Type a username with a space character
+  - Click Add Message Button
+  - Verify that an error message is displayed
 
 **Unit Testing**:
 
@@ -165,3 +165,4 @@ I added Test Cases for ViewModels and UseCases using JUnit and MockK.
 - Add Android UI tests using Espresso
 
 - Add a screen to display messages by category
+
