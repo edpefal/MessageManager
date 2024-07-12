@@ -6,15 +6,6 @@
 
 The scope of this project is to build a native Android application that interacts with a REST API to POST and GET messages. The application is designed using modern Android development practices, including MVVM (Model-View-ViewModel) architecture, and utilizes Jetpack components and Kotlin coroutines for asynchronous operations.
 
-### Screenshots
-
-![Screenshot 1](images/image6.png)
-![Screenshot 2](images/image1.png)
-![Screenshot 2](images/image2.png)
-![Screenshot 2](images/image3.png)
-![Screenshot 2](images/image4.png)
-![Screenshot 2](images/image5.png)
-
 ### Architecture
 
 The application follows a Clean Architecture approach, with a clear separation between the UI, domain, and data layers.
