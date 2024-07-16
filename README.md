@@ -179,8 +179,6 @@ To get started with the project, follow these steps:
 
 - Build and run the project on an Android emulator or physical device.
 
-- Once the application is up and running, you can start searching for specific Pokemon, check their details, as well as add or remove pokemons from your team.  .
-
 ## Roadmap
 
 - Add Android UI tests using Espresso
